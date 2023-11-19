@@ -1,0 +1,15 @@
+table, th ,td {
+    border-collapse: collapse;
+    border: 1px solid;
+}
+
+body{
+
+}
+
+@page {
+  @bottom-right {
+    content: "Page " counter(page) " of " counter(pages);
+  }
+}
+
