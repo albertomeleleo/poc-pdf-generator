@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.thymeleaf.util.StringUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,12 +31,11 @@ public class GeneratePDFController {
     public ResponseEntity<Resource> generaPDF(@RequestParam Long hubId,
                                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
                                               @RequestParam String hubName) throws IOException {
-        //try {
-            String fileName = "test";
-            //byte[] pdfContent = generatePDFService.generaPDF(generateMockCount(), fileName,date,hubName);
-            byte[] pdfContent = generatePDFService.generaPDFThymeleaf(generateMockCount(), fileName,date,hubName);
+
+            String fileName =  StringUtils.concat("riepilogo_produzione_",hubName);
+            byte[] pdfContent = generatePDFService.generaPDFThymeleaf(generateMockCount(),date,hubName);
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
+            headers.add(HttpHeaders.CONTENT_DISPOSITION, StringUtils.concat("attachment; filename=" ,fileName));
 
             ByteArrayResource resource = new ByteArrayResource(pdfContent);
 
@@ -44,11 +44,6 @@ public class GeneratePDFController {
                     .contentLength(pdfContent.length)
                     .contentType(MediaType.APPLICATION_PDF)
                     .body(resource);
-
-       /* } catch (IOException e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(null);
-        }*/
     }
 
     private List<DishForCountDTO> generateMockCount(){

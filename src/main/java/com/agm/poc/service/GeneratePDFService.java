@@ -1,6 +1,7 @@
 package com.agm.poc.service;
 
 import com.agm.poc.dto.DishForCountDTO;
+import com.agm.poc.enumeration.PdfType;
 import com.lowagie.text.DocumentException;
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -25,36 +26,46 @@ import java.util.List;
 @AllArgsConstructor
 public class GeneratePDFService {
 
-    public static final String COLUMN_1 = "Ricetta";
-    public static final String COLUMN_2 = "Quantità";
-    public static final String COLUMN_3 = "Note";
-    public static final int SECOND_COLUMN_X = 200;
-    public static final int THIRD_COLUMN_X = 100;
+    public static final String PRODUZIONE_TEMPLATE = "produzione_template";
+    public static final String SUFFIX_HTML = ".html";
+    public static final String TEMPLATES_PATH = "templates/";
+    public static final String UTF_8 = "UTF-8";
+    public static final int PDF_TYPE_PRODUZIONE = 1;
 
-    public byte[] generaPDFThymeleaf(List<DishForCountDTO> dishList, String nomeFile, Date data, String hubName){
+    public byte[] generaPDFThymeleaf(List<DishForCountDTO> dishList, Date data, String hubName){
         try {
-            return generatePdfFromHtml(parseThymeleafTemplate(dishList,nomeFile,data,hubName));
-        } catch (IOException | DocumentException e) {
+            return generatePdfFromHtml(parseThymeleafTemplate(dishList,data,hubName,PRODUZIONE_TEMPLATE, PdfType.PRODUCTION));
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private String parseThymeleafTemplate(List<DishForCountDTO> dishList, String nomeFile, Date date, String hubName) {
+    private String parseThymeleafTemplate(List<DishForCountDTO> dishList,  Date date, String hubName,String template, PdfType pdfType)  {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
-        templateResolver.setSuffix(".html");
+        templateResolver.setSuffix(SUFFIX_HTML);
         templateResolver.setTemplateMode(TemplateMode.HTML);
-        templateResolver.setPrefix("templates/");
-        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setPrefix(TEMPLATES_PATH);
+        templateResolver.setCharacterEncoding(UTF_8);
 
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
 
         Context context = new Context();
-        context.setVariable("date", date);
-        context.setVariable("dishList", dishList);
-        context.setVariable("hubName", hubName);
+        String retval ="";
+        switch (pdfType){
+            case PRODUCTION:
+                context.setVariable("date", date);
+                context.setVariable("dishList", dishList);
+                context.setVariable("hubName", hubName);
+                retval = templateEngine.process(template, context);
+            case TICKET:
 
-        return templateEngine.process("produzione_template", context);
+            case DISH:
+
+            default:
+
+        }
+        return retval;
     }
 
     public byte[]  generatePdfFromHtml(String html) throws IOException, DocumentException {
