@@ -1,6 +1,7 @@
 package com.agm.poc.service;
 
 import com.agm.poc.dto.DishForCountDTO;
+import com.agm.poc.enumeration.PdfTemplate;
 import com.agm.poc.enumeration.PdfType;
 import com.lowagie.text.DocumentException;
 import lombok.AllArgsConstructor;
@@ -25,16 +26,14 @@ import java.util.List;
 @Log4j2
 @AllArgsConstructor
 public class GeneratePDFService {
-
-    public static final String PRODUZIONE_TEMPLATE = "produzione_template";
+ 
     public static final String SUFFIX_HTML = ".html";
     public static final String TEMPLATES_PATH = "templates/";
     public static final String UTF_8 = "UTF-8";
-    public static final int PDF_TYPE_PRODUZIONE = 1;
 
     public byte[] generaPDFThymeleaf(List<DishForCountDTO> dishList, Date data, String hubName){
         try {
-            return generatePdfFromHtml(parseThymeleafTemplate(dishList,data,hubName,PRODUZIONE_TEMPLATE, PdfType.PRODUCTION));
+            return generatePdfFromHtml(parseThymeleafTemplate(dishList,data,hubName, PdfTemplate.PRODUCTION_TEMPLATE.toString(), PdfType.PRODUCTION));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
