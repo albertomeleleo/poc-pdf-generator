@@ -1,29 +1,16 @@
-package it.elior.carrello.dto;
+package com.agm.poc.dto;
+
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import flexjson.JSON;
 
-public class MenuCarrelloDTO extends ItemCarrelloDTO {
-	
-	private List<PiattoProdottoCarrelloDTO> componenti;
-	
-	public MenuCarrelloDTO() {
-		super();
-		componenti = new ArrayList<>();
-	}
+@Data
+@EqualsAndHashCode(callSuper=false)
+@NoArgsConstructor
+public class MenuCartDTO extends ItemCartDTO {
 
-	@JSON
-	public List<PiattoProdottoCarrelloDTO> getComponenti() {
-		if(componenti == null){
-			componenti = new ArrayList<>();
-		}
-		return componenti;
-	}
-
-	public void setComponenti(List<PiattoProdottoCarrelloDTO> componenti) {
-		this.componenti = componenti;
-	}
+	 private List<ArticleCartDTO> componenti;
 
 }

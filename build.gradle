@@ -29,6 +29,7 @@ dependencies {
 	implementation 'org.apache.pdfbox:pdfbox:2.0.29'
 	implementation 'org.thymeleaf:thymeleaf'
 	implementation 'org.xhtmlrenderer:flying-saucer-pdf:9.1.20'
+	implementation 'com.google.code.gson:gson'
 	compileOnly 'org.projectlombok:lombok'
 	//runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'

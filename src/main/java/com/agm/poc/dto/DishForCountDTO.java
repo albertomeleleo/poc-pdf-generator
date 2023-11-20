@@ -10,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Data
 @Builder
 public class DishForCountDTO {
+    private Long id;
+    private String category;
     private String name;
     private int quantity;
 }

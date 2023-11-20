@@ -1,11 +1,13 @@
-package it.elior.carrello.dto;
+package com.agm.poc.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ToString(callSuper=true)
-public class PiattoProdottoCarrelloDTO extends ItemCarrelloDTO {
+public class ArticleCartDTO extends ItemCartDTO {
 	
 	private String nomeCategoria;
 	private Long idCategoria;

@@ -1,6 +1,6 @@
 package com.agm.poc.service;
 
-import com.agm.poc.dto.DishForCountDTO;
+import com.agm.poc.dto.*;
 import com.agm.poc.enumeration.PdfTemplate;
 import com.agm.poc.enumeration.PdfType;
 import com.lowagie.text.DocumentException;
@@ -19,18 +19,40 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log4j2
 @AllArgsConstructor
 public class GeneratePDFService {
- 
+
+    public OrderingMapper orderingMapper;
     public static final String SUFFIX_HTML = ".html";
     public static final String TEMPLATES_PATH = "templates/";
     public static final String UTF_8 = "UTF-8";
 
+    public List<DishForCountDTO> createDataForProductionPdf(List<OrderDTO> orders) {
+        List<DishForCountDTO> dishList = new ArrayList<>();
+
+        for (OrderDTO order : orders) {
+            OrderingDTO ordering = orderingMapper.mapJsonOrderingToDTO(order.getOrdinazione());
+            if (ordering != null) {
+                List<MenuCartDTO> menuList = ordering.getMenu();
+
+                for (MenuCartDTO menu : menuList) {
+                    for (ArticleCartDTO article : menu.getComponenti()) {
+                        updateDishList(dishList, article);
+                    }
+                }
+            }
+        }
+
+        return dishList;
+    }
+    
     public byte[] generaPDFThymeleaf(List<DishForCountDTO> dishList, Date data, String hubName){
         try {
             return generatePdfFromHtml(parseThymeleafTemplate(dishList,data,hubName, PdfTemplate.PRODUCTION_TEMPLATE.toString(), PdfType.PRODUCTION));
@@ -77,5 +99,23 @@ public class GeneratePDFService {
 
        return baos.toByteArray();
     }
+
+    private void updateDishList(List<DishForCountDTO> dishList, ArticleCartDTO article) {
+        Optional<DishForCountDTO> existingDish = dishList.stream()
+                .filter(dish -> dish.getId().equals(article.getId()))
+                .findFirst();
+
+        if (existingDish.isPresent()) {
+            existingDish.get().setQuantity(existingDish.get().getQuantity() + 1);
+        } else {
+            dishList.add(DishForCountDTO.builder()
+                    .id(article.getId())
+                    .name(article.getNome())
+                    .category(article.getNomeCategoria())
+                    .quantity(1)
+                    .build());
+        }
+    }
+
 
 }

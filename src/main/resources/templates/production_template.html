@@ -10,11 +10,13 @@
     </h3>
     <table>
         <thead>
-            <th width="45%">Ricetta</th>
-            <th width="10%">Quantità</th>
-            <th width="45%">Note</th>
+             <th width="25%">Portata</th>
+            <th width="40%">Ricetta</th>
+            <th width="5%">N°</th>
+            <th width="30%">Note</th>
         </thead>
         <tr th:each="dish: ${dishList}">
+            <td th:text="${{dish.category}}" />
             <td th:text="${{dish.name}}" />
             <td th:text="${{dish.quantity}}" />
             <td></td>
