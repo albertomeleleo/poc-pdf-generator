@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link href="http://localhost:8080/css/mainTicket.css" rel="stylesheet" media="all"/>
+    </head>
+    <body>
+
+    <div th:each="dish, iterStat : ${dishList}"   >
+        <div class="page">
+            <h3 style="text-align: center">
+                <span th:text="' Prenotazioni del ' + ${date} + '  per l\'hub  ' + ${hubName}"></span>
+            </h3>
+
+                <div th:include="ticket_box_template :: dish"></div>
+                <div th:if="${!#lists.isEmpty(dishList)}" th:remove="tag"></div>
+
+                <div th:include="ticket_box_template :: dish"></div>
+                <div th:if="${!#lists.isEmpty(dishList)}" th:remove="tag"></div>
+
+                <div th:include="ticket_box_template :: dish"></div>
+                <div th:if="${!#lists.isEmpty(dishList)}" th:remove="tag"></div>
+
+                <div th:include="ticket_box_template :: dish"></div>
+                <div th:if="${!#lists.isEmpty(dishList)}" th:remove="tag"></div>
+
+                <div th:include="ticket_box_template :: dish"></div>
+                <div th:if="${!#lists.isEmpty(dishList)}" th:remove="tag"></div>
+
+                <div th:include="ticket_box_template :: dish"></div>
+                <div th:if="${!#lists.isEmpty(dishList)}" th:remove="tag"></div>
+
+
+        </div>
+
+    </div>
+
+
+    </body>
+</html>
